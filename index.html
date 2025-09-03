@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مولد مفاتيح PUBG</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif;}
+
+    body {
+      background: linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);
+      background-size:400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display:flex; justify-content:center; align-items:center;
+      height:100vh; color:#333;
+    }
+    @keyframes gradientBG {
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    .container {
+      background:#fff; border-radius:20px; padding:30px;
+      width:90%; max-width:420px; text-align:center;
+      box-shadow:0 15px 35px rgba(0,0,0,0.3);
+      animation: fadeIn 1s ease;
+    }
+    .logo {
+      width:100px;height:100px;margin:0 auto 20px;
+      border-radius:50%; display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#6a11cb,#2575fc);
+      color:#fff;font-size:40px; box-shadow:0 5px 15px rgba(0,0,0,0.2);
+      animation:bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-10px);}
+    }
+    h1 {color:#2575fc; margin-bottom:20px;}
+
+    .form-group {margin-bottom:18px; position:relative; text-align:right;}
+    label {display:block; margin-bottom:6px; font-weight:600; color:#2575fc;}
+    input,select {
+      width:100%; padding:12px 15px; border:2px solid #ddd;
+      border-radius:10px; font-size:15px; transition:0.3s;
+      padding-right:40px;
+    }
+    input:focus,select:focus {border-color:#6a11cb; outline:none;}
+    .input-icon {position:absolute; right:12px; top:40px; color:#6a11cb;}
+
+    button {
+      width:100%; padding:12px; border:none; border-radius:10px;
+      background:linear-gradient(to right,#6a11cb,#2575fc); color:#fff;
+      font-weight:600; cursor:pointer; margin-top:8px;
+      transition:0.3s; display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    button:hover {transform:translateY(-3px); box-shadow:0 7px 20px rgba(0,0,0,0.3);}
+    button:active {transform:translateY(1px);}
+    .logout-btn {background:#dc3545;}
+    .copy-btn {background:#28a745; display:none;}
+
+    .switch-form {margin-top:15px;}
+    .switch-form a {color:#2575fc; cursor:pointer; font-weight:bold;}
+    .switch-form a:hover {text-decoration:underline;}
+
+    .dashboard {display:none;}
+    .user-info {text-align:right; margin-bottom:20px; padding:12px;
+      background:#f8f9fa; border-radius:10px;}
+    .key-generator {margin-top:20px; padding:15px; background:#f8f9fa; border-radius:10px;}
+    .generated-key {
+      display:none; margin-top:15px; padding:15px; border:2px dashed #6a11cb;
+      border-radius:10px; font-family:monospace; font-weight:bold;
+    }
+    .key-history {margin-top:20px; text-align:right; display:none;}
+    .key-list {max-height:150px; overflow:auto; background:#f8f9fa; padding:8px; border-radius:10px;}
+    .key-item {padding:6px; border-bottom:1px solid #ddd; font-family:monospace; font-size:14px;}
+
+    .notification {
+      position:fixed; top:20px; right:20px; background:#28a745; color:#fff;
+      padding:10px 18px; border-radius:8px; display:none; animation:fadeIn 0.5s;
+    }
+    @keyframes fadeIn {from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);}}
+  </style>
+</head>
+<body>
+
+  <!-- إشعار -->
+  <div class="notification" id="copy-notification">تم نسخ المفتاح ✅</div>
+
+  <!-- تسجيل الدخول -->
+  <div class="container" id="login-container">
+    <div class="logo"><i class="fas fa-gamepad"></i></div>
+    <h1>تسجيل الدخول</h1>
+    <div class="form-group">
+      <label for="login-username">اسم المستخدم</label>
+      <input type="text" id="login-username">
+      <div class="input-icon"><i class="fas fa-user"></i></div>
+    </div>
+    <div class="form-group">
+      <label for="login-password">كلمة المرور</label>
+      <input type="password" id="login-password">
+      <div class="input-icon"><i class="fas fa-lock"></i></div>
+    </div>
+    <button id="login-btn"><i class="fas fa-sign-in-alt"></i> دخول</button>
+    <div class="switch-form"><p>ما عندكش حساب؟ <a id="switch-to-register">إنشاء حساب</a></p></div>
+  </div>
+
+  <!-- إنشاء حساب -->
+  <div class="container" id="register-container" style="display:none;">
+    <div class="logo"><i class="fas fa-user-plus"></i></div>
+    <h1>إنشاء حساب</h1>
+    <div class="form-group"><label>اسم المستخدم</label>
+      <input type="text" id="register-username"><div class="input-icon"><i class="fas fa-user"></i></div>
+    </div>
+    <div class="form-group"><label>الاسم الكامل</label>
+      <input type="text" id="register-fullname"><div class="input-icon"><i class="fas fa-signature"></i></div>
+    </div>
+    <div class="form-group"><label>كلمة المرور</label>
+      <input type="password" id="register-password"><div class="input-icon"><i class="fas fa-lock"></i></div>
+    </div>
+    <div class="form-group"><label>تأكيد كلمة المرور</label>
+      <input type="password" id="register-confirm-password"><div class="input-icon"><i class="fas fa-lock"></i></div>
+    </div>
+    <button id="register-btn"><i class="fas fa-user-plus"></i> تسجيل</button>
+    <div class="switch-form"><p>عندك حساب؟ <a id="switch-to-login">تسجيل الدخول</a></p></div>
+  </div>
+
+  <!-- لوحة التحكم -->
+  <div class="container dashboard" id="dashboard">
+    <div class="logo"><i class="fas fa-user-shield"></i></div>
+    <h1>لوحة التحكم</h1>
+    <div class="user-info">
+      <p>مرحباً <span id="user-fullname"></span></p>
+      <p>اسم المستخدم: <span id="display-username"></span></p>
+    </div>
+    <div class="key-generator">
+      <h2><i class="fas fa-key"></i> توليد مفتاح</h2>
+      <div class="form-group">
+        <label>عدد الأجهزة</label>
+        <select id="devices">
+          <option value="10">10</option><option value="20">20</option><option value="50">50</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>المدة</label>
+        <select id="duration">
+          <option value="1">1 ساعة</option><option value="12">12 ساعة</option><option value="24">يوم</option>
+        </select>
+      </div>
+      <button id="generate-btn"><i class="fas fa-cogs"></i> توليد</button>
+      <div class="generated-key" id="generated-key">المفتاح: <span id="key-value"></span></div>
+      <button class="copy-btn" id="copy-btn"><i class="fas fa-copy"></i> نسخ</button>
+    </div>
+    <div class="key-history" id="key-history">
+      <h3><i class="fas fa-history"></i> سجل المفاتيح</h3>
+      <div class="key-list" id="key-list"></div>
+    </div>
+    <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> خروج</button>
+  </div>
+
+  <script>
+    const loginContainer=document.getElementById('login-container'),
+          registerContainer=document.getElementById('register-container'),
+          dashboard=document.getElementById('dashboard'),
+          loginBtn=document.getElementById('login-btn'),
+          registerBtn=document.getElementById('register-btn'),
+          switchToRegister=document.getElementById('switch-to-register'),
+          switchToLogin=document.getElementById('switch-to-login'),
+          generateBtn=document.getElementById('generate-btn'),
+          copyBtn=document.getElementById('copy-btn'),
+          logoutBtn=document.getElementById('logout-btn'),
+          keyValue=document.getElementById('key-value'),
+          generatedKey=document.getElementById('generated-key'),
+          keyList=document.getElementById('key-list'),
+          keyHistory=document.getElementById('key-history'),
+          copyNotification=document.getElementById('copy-notification');
+
+    let users=JSON.parse(localStorage.getItem('users'))||[];
+    let currentUser=null;
+
+    switchToRegister.onclick=()=>{loginContainer.style.display='none';registerContainer.style.display='block';};
+    switchToLogin.onclick=()=>{registerContainer.style.display='none';loginContainer.style.display='block';};
+
+    loginBtn.onclick=()=>{
+      let u=document.getElementById('login-username').value,
+          p=document.getElementById('login-password').value;
+      let user=users.find(x=>x.username===u&&x.password===p);
+      if(user){currentUser=user;showDashboard();}
+      else alert('خطأ في الدخول');
+    };
+
+    registerBtn.onclick=()=>{
+      let u=document.getElementById('register-username').value,
+          f=document.getElementById('register-fullname').value,
+          p=document.getElementById('register-password').value,
+          cp=document.getElementById('register-confirm-password').value;
+      if(!u||!f||!p||!cp)return alert('املا كل الخانات');
+      if(p!==cp)return alert('كلمة المرور غير متطابقة');
+      if(users.some(x=>x.username===u))return alert('مستخدم موجود');
+      let newUser={username:u,fullname:f,password:p,keys:[]};
+      users.push(newUser); localStorage.setItem('users',JSON.stringify(users));
+      currentUser=newUser; showDashboard();
+    };
+
+    function showDashboard(){
+      loginContainer.style.display='none';registerContainer.style.display='none';dashboard.style.display='block';
+      document.getElementById('user-fullname').textContent=currentUser.fullname;
+      document.getElementById('display-username').textContent=currentUser.username;
+      keyList.innerHTML='';
+      if(currentUser.keys.length){keyHistory.style.display='block';
+        currentUser.keys.forEach(k=>{
+          let d=document.createElement('div');d.className='key-item';d.textContent=k;
+          keyList.appendChild(d);
+        });
+      }
+    }
+
+    generateBtn.onclick=()=>{
+      let devices=document.getElementById('devices').value,
+          duration=document.getElementById('duration').value;
+      let key="PUBG-"+Math.random().toString(36).substring(2,10).toUpperCase();
+      keyValue.textContent=`${key}-D${devices}-T${duration}`;
+      generatedKey.style.display='block';copyBtn.style.display='block';
+      currentUser.keys.push(keyValue.textContent);
+      localStorage.setItem('users',JSON.stringify(users));
+      let d=document.createElement('div');d.className='key-item';d.textContent=keyValue.textContent;
+      keyList.appendChild(d);keyHistory.style.display='block';
+    };
+
+    copyBtn.onclick=()=>{
+      navigator.clipboard.writeText(keyValue.textContent).then(()=>{
+        copyNotification.style.display='block';
+        setTimeout(()=>copyNotification.style.display='none',2000);
+      });
+    };
+
+    logoutBtn.onclick=()=>{currentUser=null;dashboard.style.display='none';loginContainer.style.display='block';};
+  </script>
+</body>
+</html>
