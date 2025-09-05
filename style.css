@@ -1,0 +1,59 @@
+body {
+  font-family: "Cairo", sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  text-align: center;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: rgba(0,0,0,0.5);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  width: 400px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+button {
+  display: block;
+  margin: 15px auto;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#chooseBtn {
+  background-color: #00c6ff;
+  color: #fff;
+}
+
+#chooseBtn:hover {
+  background-color: #009ace;
+}
+
+#encryptBtn {
+  background-color: #00ff7f;
+  color: #000;
+}
+
+#encryptBtn:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+#status {
+  margin-top: 15px;
+  font-size: 14px;
+}
